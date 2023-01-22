@@ -7,9 +7,11 @@
 package decode
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
@@ -65,10 +67,21 @@ func (a *DecodeActivity) Eval(context activity.Context) (done bool, err error) {
 	}
 
 	var data interface{}
-	xml.Unmarshal([]byte(input.contentAsXml), &data)
 
-	activityLog.Debug(string(input.contentAsXml))
+	if a.settings.Encoded {
+		contentAsXml, err := base64.StdEncoding.DecodeString(input.contentAsXml)
+		if err != nil {
+			logger.Debugf("Error decoding string: %s", err.Error())
+			return false, activity.NewError("Error decoding base64 encoded string", "XML-DECODE-4002", nil)
+		}
+		activityLog.Debug(contentAsXml)
+		xml.Unmarshal([]byte(contentAsXml), &data)
 
+	} else {
+		activityLog.Debug(input.contentAsXml)
+		xml.Unmarshal([]byte(input.contentAsXml), &data)
+	}
+	
 	jsonData, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		return false, activity.NewError("Error marshalling JSON output", "XML-DECODE-4001", nil)

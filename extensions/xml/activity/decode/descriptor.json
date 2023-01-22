@@ -14,6 +14,11 @@
 
   "ref": "github.com/mmussett/tci-flogo-contrib/extensions/xml/activity/decode",
   "settings": [
+    {
+      "name": "encoded",
+      "type":"boolean",
+      "description": "treats input as base64 encoded string"
+    }
   ],
   "inputs": [
     {

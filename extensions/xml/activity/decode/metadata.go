@@ -5,6 +5,7 @@ import (
 )
 
 type Settings struct {
+	Encoded bool `md:"encoded"` // Ignore content-type header and treat as string
 }
 
 type Input struct {
