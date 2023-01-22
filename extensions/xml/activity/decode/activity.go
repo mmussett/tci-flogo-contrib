@@ -30,10 +30,9 @@ func init() {
 
 var activityLog = log.ChildLogger(log.RootLogger(), "aws-activity-sqssendmessage")
 
-var activityMd = activity.ToMetadata(&Settings{}, &Input{}, &Output{})
+var activityMd = activity.ToMetadata(&Input{}, &Output{})
 
 type Activity struct {
-	settings *Settings
 }
 
 func New(ctx activity.InitContext) (activity.Activity, error) {
@@ -44,7 +43,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, err
 	}
 
-	act := &Activity{settings: s}
+	act := &Activity{}
 	return act, nil
 }
 

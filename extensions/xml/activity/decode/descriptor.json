@@ -11,9 +11,6 @@
     "description": "This activity decodes a well-formed XML string to JSON string"
   },
   "ref": "github.com/mmussett/tci-flogo-contrib/extensions/xml/activity/decode",
-  "settings": [
-    {}
-  ],
   "inputs": [
     {
       "name": "encoded",

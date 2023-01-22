@@ -25,7 +25,7 @@ var xmlData = `<?xml version="1.0" encoding="UTF-8"?>
 
 var encodedXmlData = `PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KCTxub3RlPgoJICA8dG8+VG92ZTwvdG8+CgkgIDxmcm9tPkphbmk8L2Zyb20+CgkgIDxoZWFkaW5nPlJlbWluZGVyPC9oZWFkaW5nPgoJICA8Ym9keT5Eb24ndCBmb3JnZXQgbWUgdGhpcyB3ZWVrZW5kITwvYm9keT4KCTwvbm90ZT4=`
 
-var jsonResult = `{"note": {"body": "Don't forget me this weekend!", "to": "Tove", "from": "Jani", "heading": "Reminder"}}`
+var jsonResult = `{"note": {"to": "Tove", "from": "Jani", "heading": "Reminder", "body": "Don't forget me this weekend!"}}`
 
 func TestCreate(t *testing.T) {
 
@@ -42,6 +42,24 @@ func TestEval1(t *testing.T) {
 
 	tc.SetInput("contentAsXml", xmlData)
 	tc.SetInput("encoded", false)
+	done, err := act.Eval(tc)
+	if !done {
+		fmt.Println(err)
+	}
+
+	result := tc.GetOutput("contentAsJson")
+
+	assert.Equal(t, result, jsonResult)
+
+}
+
+func TestEval2(t *testing.T) {
+
+	act := &Activity{}
+	tc := test.NewActivityContext(act.Metadata())
+
+	tc.SetInput("contentAsXml", encodedXmlData)
+	tc.SetInput("encoded", true)
 	done, err := act.Eval(tc)
 	if !done {
 		fmt.Println(err)
