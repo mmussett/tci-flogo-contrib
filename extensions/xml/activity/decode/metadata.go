@@ -39,7 +39,7 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 
 // Output struct for activity output
 type Output struct {
-	ContentAsJson string `md:"ContentAsJson"`
+	ContentAsJson string `md:"contentAsJson"`
 }
 
 // ToMap conversion
