@@ -1,33 +1,31 @@
 {
   "name": "decode",
   "version": "1.0.0",
-  "author": "TIBCO Software Inc.",
+  "author": "Mark Mussett",
   "type": "flogo:activity",
   "title": "Decode XML string to JSON string",
-
   "display": {
     "category": "XML",
     "visible": true,
     "smallIcon": "decode.png",
     "description": "This activity decodes a well-formed XML string to JSON string"
   },
-
   "ref": "github.com/mmussett/tci-flogo-contrib/extensions/xml/activity/decode",
   "settings": [
-    {
-      "name": "encoded",
-      "type":"boolean",
-      "description": "treats input as base64 encoded string"
-    }
+    {}
   ],
   "inputs": [
+    {
+      "name": "encoded",
+      "type": "boolean",
+      "required": true
+    },
     {
       "name": "contentAsXml",
       "type": "string",
       "required": true
     }
   ],
-
   "outputs": [
     {
       "name": "contentAsJson",

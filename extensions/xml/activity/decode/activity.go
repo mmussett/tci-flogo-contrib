@@ -8,13 +8,14 @@ package decode
 
 import (
 	"encoding/base64"
-	"encoding/json"
-	"encoding/xml"
 	"fmt"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
+	"strings"
+
+	xj "github.com/basgys/goxml2json"
 )
 
 /*
@@ -24,14 +25,14 @@ import (
  */
 
 func init() {
-	_ = activity.Register(&DecodeActivity{}, New)
+	_ = activity.Register(&Activity{}, New)
 }
 
 var activityLog = log.ChildLogger(log.RootLogger(), "aws-activity-sqssendmessage")
 
 var activityMd = activity.ToMetadata(&Settings{}, &Input{}, &Output{})
 
-type DecodeActivity struct {
+type Activity struct {
 	settings *Settings
 }
 
@@ -43,15 +44,15 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 		return nil, err
 	}
 
-	act := &DecodeActivity{settings: s}
+	act := &Activity{settings: s}
 	return act, nil
 }
 
-func (a *DecodeActivity) Metadata() *activity.Metadata {
+func (a *Activity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
-func (a *DecodeActivity) Eval(context activity.Context) (done bool, err error) {
+func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 
 	input := &Input{}
 
@@ -62,36 +63,31 @@ func (a *DecodeActivity) Eval(context activity.Context) (done bool, err error) {
 
 	activityLog.Info("Executing decode activity")
 
-	if input.contentAsXml == "" {
+	if input.ContentAsXml == "" {
 		return false, activity.NewError("XML content is empty", "XML-DECODE-4000", nil)
 	}
 
-	var data interface{}
-
-	if a.settings.Encoded {
-		contentAsXml, err := base64.StdEncoding.DecodeString(input.contentAsXml)
+	var xmldata = ""
+	if input.Encoded {
+		data, err := base64.StdEncoding.DecodeString(input.ContentAsXml)
 		if err != nil {
 			logger.Debugf("Error decoding string: %s", err.Error())
 			return false, activity.NewError("Error decoding base64 encoded string", "XML-DECODE-4002", nil)
 		}
-		activityLog.Debug(contentAsXml)
-		xml.Unmarshal([]byte(contentAsXml), &data)
-
+		xmldata = string(data)
 	} else {
-		activityLog.Debug(input.contentAsXml)
-		xml.Unmarshal([]byte(input.contentAsXml), &data)
+		xmldata = input.ContentAsXml
 	}
-	
-	jsonData, err := json.MarshalIndent(data, "", "  ")
+
+	json, err := xj.Convert(strings.NewReader(xmldata))
 	if err != nil {
-		return false, activity.NewError("Error marshalling JSON output", "XML-DECODE-4001", nil)
+		panic("That's embarrassing...")
 	}
 
-	activityLog.Debug(string(jsonData))
+	activityLog.Debug(json.String())
 
-	//Set  ID in the output
 	output := &Output{}
-	output.contentAsJson = string(jsonData)
+	output.ContentAsJson = json.String()
 
 	err = context.SetOutputObject(output)
 	if err != nil {

@@ -5,17 +5,18 @@ import (
 )
 
 type Settings struct {
-	Encoded bool `md:"encoded"` // Ignore content-type header and treat as string
 }
 
 type Input struct {
-	contentAsXml string `md:"ContentAsXml"`
+	Encoded      bool   `md:encoded`
+	ContentAsXml string `md:"contentAsXml"`
 }
 
 // ToMap conversion
 func (i *Input) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		"ContentAsXml": i.contentAsXml,
+		"encoded":      i.Encoded,
+		"contentAsXml": i.ContentAsXml,
 	}
 }
 
@@ -23,7 +24,12 @@ func (i *Input) ToMap() map[string]interface{} {
 func (i *Input) FromMap(values map[string]interface{}) error {
 	var err error
 
-	i.contentAsXml, err = coerce.ToString(values["ContentAsXml"])
+	i.ContentAsXml, err = coerce.ToString(values["contentAsXml"])
+	if err != nil {
+		return err
+	}
+
+	i.Encoded, err = coerce.ToBool(values["encoded"])
 	if err != nil {
 		return err
 	}
@@ -33,13 +39,13 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 
 // Output struct for activity output
 type Output struct {
-	contentAsJson string `md:"ContentAsJson"`
+	ContentAsJson string `md:"ContentAsJson"`
 }
 
 // ToMap conversion
 func (o *Output) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		"ContentAsJson": o.contentAsJson,
+		"contentAsJson": o.ContentAsJson,
 	}
 }
 
@@ -47,7 +53,7 @@ func (o *Output) ToMap() map[string]interface{} {
 func (o *Output) FromMap(values map[string]interface{}) error {
 
 	var err error
-	o.contentAsJson, err = coerce.ToString(values["ContentAsJson"])
+	o.ContentAsJson, err = coerce.ToString(values["contentAsJson"])
 	if err != nil {
 		return err
 	}

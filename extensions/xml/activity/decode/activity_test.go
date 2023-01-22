@@ -7,115 +7,48 @@
 package decode
 
 import (
-	"github.com/TIBCOSoftware/flogo-lib/core/activity"
-	"github.com/TIBCOSoftware/flogo-lib/core/mapper"
-	"github.com/project-flogo/core/data"
-	"github.com/project-flogo/core/data/metadata"
-	logger "github.com/project-flogo/core/support/log"
-	"github.com/project-flogo/core/support/trace"
+	"fmt"
 	"testing"
+
+	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/support/test"
+	"github.com/stretchr/testify/assert"
 )
 
-type initContext struct {
-	settings map[string]interface{}
+var xmlData = `<?xml version="1.0" encoding="UTF-8"?>
+	<note>
+	  <to>Tove</to>
+	  <from>Jani</from>
+	  <heading>Reminder</heading>
+	  <body>Don't forget me this weekend!</body>
+	</note>`
+
+var encodedXmlData = `PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KCTxub3RlPgoJICA8dG8+VG92ZTwvdG8+CgkgIDxmcm9tPkphbmk8L2Zyb20+CgkgIDxoZWFkaW5nPlJlbWluZGVyPC9oZWFkaW5nPgoJICA8Ym9keT5Eb24ndCBmb3JnZXQgbWUgdGhpcyB3ZWVrZW5kITwvYm9keT4KCTwvbm90ZT4=`
+
+var jsonResult = `{"note": {"body": "Don't forget me this weekend!", "to": "Tove", "from": "Jani", "heading": "Reminder"}}`
+
+func TestCreate(t *testing.T) {
+
+	ref := activity.GetRef(&Activity{})
+	act := activity.Get(ref)
+
+	assert.NotNil(t, act)
 }
 
-func newInitContext(values map[string]interface{}) *initContext {
-	if values == nil {
-		values = make(map[string]interface{})
+func TestEval1(t *testing.T) {
+
+	act := &Activity{}
+	tc := test.NewActivityContext(act.Metadata())
+
+	tc.SetInput("contentAsXml", xmlData)
+	tc.SetInput("encoded", false)
+	done, err := act.Eval(tc)
+	if !done {
+		fmt.Println(err)
 	}
-	return &initContext{
-		settings: values,
-	}
-}
 
-func (i *initContext) Settings() map[string]interface{} {
-	return i.settings
-}
+	result := tc.GetOutput("contentAsJson")
 
-func (i *initContext) MapperFactory() mapper.Factory {
-	return nil
-}
-
-func (i *initContext) Logger() logger.Logger {
-	return logger.RootLogger()
-}
-func (i *initContext) GetTracingContext() trace.TracingContext {
-	return nil
-}
-
-type activityContext struct {
-	input  map[string]interface{}
-	output map[string]interface{}
-}
-
-func newActivityContext(values map[string]interface{}) *activityContext {
-	if values == nil {
-		values = make(map[string]interface{})
-	}
-	return &activityContext{
-		input:  values,
-		output: make(map[string]interface{}),
-	}
-}
-
-func (a *activityContext) ActivityHost() activity.Host {
-	return a.ActivityHost()
-}
-
-func (a *activityContext) Name() string {
-	return "test"
-}
-
-func (a *activityContext) GetInput(name string) interface{} {
-	return a.input[name]
-}
-
-func (a *activityContext) SetOutput(name string, value interface{}) error {
-	a.output[name] = value
-	return nil
-}
-
-func (a *activityContext) GetInputObject(input data.StructValue) error {
-	return input.FromMap(a.input)
-}
-
-func (a *activityContext) SetOutputObject(output data.StructValue) error {
-	a.output = output.ToMap()
-	return nil
-}
-
-func (a *activityContext) GetSharedTempData() map[string]interface{} {
-	return nil
-}
-
-func (a *activityContext) ID() string {
-	return "test"
-}
-func (a *activityContext) GetTracingContext() trace.TracingContext {
-	return nil
-}
-
-func (a *activityContext) IOMetadata() *metadata.IOMetadata {
-	return nil
-}
-
-func (a *activityContext) Reply(replyData map[string]interface{}, err error) {
-
-}
-
-func (a *activityContext) Return(returnData map[string]interface{}, err error) {
-
-}
-
-func (a *activityContext) Scope() data.Scope {
-	return nil
-}
-
-func (a *activityContext) Logger() logger.Logger {
-	return logger.RootLogger()
-}
-
-func TestDecodeActivity_Eval(t *testing.T) {
+	assert.Equal(t, result, jsonResult)
 
 }
