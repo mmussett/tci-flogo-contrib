@@ -12,6 +12,8 @@ require (
 require (
 	github.com/araddon/dateparse v0.0.0-20190622164848-0fb0a474d195 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
+	github.com/clbanning/mxj v1.8.4 // indirect
+	github.com/clbanning/mxj/v2 v2.5.7 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
