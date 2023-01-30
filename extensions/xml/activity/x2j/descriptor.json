@@ -1,14 +1,14 @@
 {
-  "name": "Xml2Json",
+  "name": "x2j",
   "version": "1.0.4",
   "author": "Mark Mussett",
   "type": "flogo:activity",
-  "title": "Xml2Json",
+  "title": "x2j",
   "display": {
     "category": "XML",
     "visible": true,
     "smallIcon": "x2j.png",
-    "description": "Xml2Json"
+    "description": "x2j"
   },
   "ref": "github.com/mmussett/tci-flogo-contrib/extensions/xml/activity/x2j",
   "inputs": [
