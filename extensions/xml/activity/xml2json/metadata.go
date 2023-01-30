@@ -1,4 +1,4 @@
-package x2j
+package xml2json
 
 import (
 	"github.com/project-flogo/core/data/coerce"

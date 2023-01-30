@@ -4,7 +4,7 @@
  * in the license file that is distributed with this file.
  */
 
-package x2j
+package xml2json
 
 import (
 	"encoding/base64"
@@ -16,17 +16,11 @@ import (
 	"github.com/project-flogo/core/support/log"
 )
 
-/*
- * Copyright © 2023. Mark Mussett.
- * This file is subject to the license terms contained
- * in the license file that is distributed with this file.
- */
-
 func init() {
 	_ = activity.Register(&Activity{}, New)
 }
 
-var activityLog = log.ChildLogger(log.RootLogger(), "aws-activity-x2j")
+var activityLog = log.ChildLogger(log.RootLogger(), "activity-xml2json")
 
 var activityMd = activity.ToMetadata(&Input{}, &Output{})
 
@@ -58,7 +52,7 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 		return false, err
 	}
 
-	activityLog.Info("Executing x2j activity")
+	activityLog.Info("Executing xml2json activity")
 
 	if input.ContentAsXml == "" {
 		return false, activity.NewError("XML content is empty", "XML-DECODE-4000", nil)

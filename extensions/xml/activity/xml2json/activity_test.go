@@ -4,7 +4,7 @@
  * in the license file that is distributed with this file.
  */
 
-package x2j
+package xml2json
 
 import (
 	"fmt"
@@ -280,7 +280,7 @@ func TestEval2(t *testing.T) {
 
 //func TestAnyXML(t *testing.T) {
 //
-//	jsonObj, err := x2j.XmlToJson(xmlData, true)
+//	jsonObj, err := xml2json.XmlToJson(xmlData, true)
 //	if err != nil {
 //		assert.Error(t, err)
 //	}
