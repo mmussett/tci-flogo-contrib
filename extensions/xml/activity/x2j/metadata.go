@@ -1,4 +1,4 @@
-package decode
+package x2j
 
 import (
 	"github.com/project-flogo/core/data/coerce"

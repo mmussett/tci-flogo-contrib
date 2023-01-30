@@ -1,16 +1,16 @@
 {
-  "name": "decode",
+  "name": "x2j",
   "version": "1.0.2",
   "author": "Mark Mussett",
   "type": "flogo:activity",
-  "title": "Decode XML string to JSON string",
+  "title": "x2j",
   "display": {
     "category": "XML",
     "visible": true,
-    "smallIcon": "decode.png",
-    "description": "This activity decodes a well-formed XML string to JSON string"
+    "smallIcon": "x2j.png",
+    "description": "Translate XML to JSON"
   },
-  "ref": "github.com/mmussett/tci-flogo-contrib/extensions/xml/activity/decode",
+  "ref": "github.com/mmussett/tci-flogo-contrib/extensions/xml/activity/x2j",
   "inputs": [
     {
       "name": "encoded",

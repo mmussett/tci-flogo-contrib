@@ -4,7 +4,7 @@
  * in the license file that is distributed with this file.
  */
 
-package decode
+package x2j
 
 import (
 	"encoding/base64"
