@@ -13,9 +13,8 @@ import (
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
-	"strings"
 
-	xj "github.com/basgys/goxml2json"
+	"github.com/clbanning/mxj/v2/x2j"
 )
 
 /*
@@ -28,7 +27,7 @@ func init() {
 	_ = activity.Register(&Activity{}, New)
 }
 
-var activityLog = log.ChildLogger(log.RootLogger(), "aws-activity-sqssendmessage")
+var activityLog = log.ChildLogger(log.RootLogger(), "aws-activity-x2j")
 
 var activityMd = activity.ToMetadata(&Input{}, &Output{})
 
@@ -60,7 +59,7 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 		return false, err
 	}
 
-	activityLog.Info("Executing decode activity")
+	activityLog.Info("Executing x2j activity")
 
 	if input.ContentAsXml == "" {
 		return false, activity.NewError("XML content is empty", "XML-DECODE-4000", nil)
@@ -78,15 +77,15 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 		xmldata = input.ContentAsXml
 	}
 
-	json, err := xj.Convert(strings.NewReader(xmldata))
+	json, err := x2j.XmlToJson([]byte(xmldata), true)
 	if err != nil {
 		panic("That's embarrassing...")
 	}
 
-	activityLog.Debug(json.String())
-
 	output := &Output{}
-	output.ContentAsJson = json.String()
+	output.ContentAsJson = string(json[:len(json)])
+
+	activityLog.Debug(output.ContentAsJson)
 
 	err = context.SetOutputObject(output)
 	if err != nil {
