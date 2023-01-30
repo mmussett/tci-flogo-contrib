@@ -8,6 +8,7 @@ package decode
 
 import (
 	"fmt"
+	"github.com/stretchr/testify/require"
 	"testing"
 
 	"github.com/project-flogo/core/activity"
@@ -25,7 +26,7 @@ var xmlData = `<?xml version="1.0" encoding="UTF-8"?>
 
 var encodedXmlData = `PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KCTxub3RlPgoJICA8dG8+VG92ZTwvdG8+CgkgIDxmcm9tPkphbmk8L2Zyb20+CgkgIDxoZWFkaW5nPlJlbWluZGVyPC9oZWFkaW5nPgoJICA8Ym9keT5Eb24ndCBmb3JnZXQgbWUgdGhpcyB3ZWVrZW5kITwvYm9keT4KCTwvbm90ZT4=`
 
-var jsonResult = `{"note": {"to": "Tove", "from": "Jani", "heading": "Reminder", "body": "Don't forget me this weekend!"}}`
+var expected = `{"note": {"to": "Tove", "from": "Jani", "heading": "Reminder", "body": "Don't forget me this weekend!"}}`
 
 func TestCreate(t *testing.T) {
 
@@ -47,9 +48,7 @@ func TestEval1(t *testing.T) {
 		fmt.Println(err)
 	}
 
-	result := tc.GetOutput("contentAsJson")
-
-	assert.Equal(t, result, jsonResult)
+	require.JSONEq(t, expected, fmt.Sprint(tc.GetOutput("contentAsJson")))
 
 }
 
@@ -65,8 +64,6 @@ func TestEval2(t *testing.T) {
 		fmt.Println(err)
 	}
 
-	result := tc.GetOutput("contentAsJson")
-
-	assert.Equal(t, result, jsonResult)
+	require.JSONEq(t, expected, fmt.Sprint(tc.GetOutput("contentAsJson")))
 
 }
