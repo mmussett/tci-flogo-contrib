@@ -10,11 +10,10 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
+	"github.com/clbanning/mxj"
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
-
-	"github.com/clbanning/mxj/v2/x2j"
 )
 
 /*
@@ -77,9 +76,14 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 		xmldata = input.ContentAsXml
 	}
 
-	json, err := x2j.XmlToJson([]byte(xmldata), true)
+	xml, err := mxj.NewMapXml([]byte(xmldata), true)
 	if err != nil {
-		panic("That's embarrassing...")
+		return false, err
+	}
+
+	json, err := xml.Json(true)
+	if err != nil {
+		return false, err
 	}
 
 	output := &Output{}
