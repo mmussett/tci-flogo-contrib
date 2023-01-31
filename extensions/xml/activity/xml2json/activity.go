@@ -72,9 +72,9 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 
 	// Preserve ordering of XML elements
 	var json []byte
+
 	var mv mxj.Map
 
-	mxj.JsonUseNumber = true
 	if input.Ordered {
 		mv, err = mxj.NewMapXmlSeq([]byte(xmldata), true)
 	} else {
