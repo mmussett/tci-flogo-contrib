@@ -1,4 +1,4 @@
-package xml2json
+package json2xml
 
 import (
 	"github.com/project-flogo/core/data/coerce"
@@ -8,17 +8,15 @@ type Settings struct {
 }
 
 type Input struct {
-	Encoded      bool   `md:encoded`
-	Ordered      bool   `md:ordered`
-	ContentAsXml string `md:"contentAsXml"`
+	Ordered       bool   `md:ordered`
+	ContentAsJson string `md:"contentAsXml"`
 }
 
 // ToMap conversion
 func (i *Input) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		"encoded":      i.Encoded,
-		"ordered":      i.Ordered,
-		"contentAsXml": i.ContentAsXml,
+		"ordered":       i.Ordered,
+		"contentAsJson": i.ContentAsJson,
 	}
 }
 
@@ -26,12 +24,7 @@ func (i *Input) ToMap() map[string]interface{} {
 func (i *Input) FromMap(values map[string]interface{}) error {
 	var err error
 
-	i.ContentAsXml, err = coerce.ToString(values["contentAsXml"])
-	if err != nil {
-		return err
-	}
-
-	i.Encoded, err = coerce.ToBool(values["encoded"])
+	i.ContentAsJson, err = coerce.ToString(values["contentAsJson"])
 	if err != nil {
 		return err
 	}
@@ -46,13 +39,13 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 
 // Output struct for activity output
 type Output struct {
-	ContentAsJson string `md:"contentAsJson"`
+	ContentAsXml string `md:"contentAsXml"`
 }
 
 // ToMap conversion
 func (o *Output) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		"contentAsJson": o.ContentAsJson,
+		"contentAsXml": o.ContentAsXml,
 	}
 }
 
@@ -60,7 +53,7 @@ func (o *Output) ToMap() map[string]interface{} {
 func (o *Output) FromMap(values map[string]interface{}) error {
 
 	var err error
-	o.ContentAsJson, err = coerce.ToString(values["contentAsJson"])
+	o.ContentAsXml, err = coerce.ToString(values["contentAsXml"])
 	if err != nil {
 		return err
 	}

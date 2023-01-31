@@ -18,6 +18,11 @@
       "required": true
     },
     {
+      "name": "ordered",
+      "type": "boolean",
+      "required": true
+    },
+    {
       "name": "contentAsXml",
       "type": "string",
       "required": true

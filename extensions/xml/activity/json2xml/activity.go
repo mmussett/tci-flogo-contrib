@@ -4,12 +4,10 @@
  * in the license file that is distributed with this file.
  */
 
-package xml2json
+package json2xml
 
 import (
-	"encoding/base64"
 	"fmt"
-	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/clbanning/mxj"
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
@@ -52,47 +50,36 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 		return false, err
 	}
 
-	activityLog.Info("Executing xml2json activity")
+	activityLog.Info("Executing json2xml activity")
 
-	if input.ContentAsXml == "" {
-		return false, activity.NewError("XML content is empty", "XML-DECODE-4000", nil)
+	if input.ContentAsJson == "" {
+		return false, activity.NewError("JSON content is empty", "JSON-DECODE-4000", nil)
 	}
 
-	var xmldata = ""
-	if input.Encoded {
-		data, err := base64.StdEncoding.DecodeString(input.ContentAsXml)
-		if err != nil {
-			logger.Debugf("Error decoding string: %s", err.Error())
-			return false, activity.NewError("Error decoding base64 encoded string", "XML-DECODE-4002", nil)
-		}
-		xmldata = string(data)
-	} else {
-		xmldata = input.ContentAsXml
-	}
+	var jsondata = input.ContentAsJson
 
-	// Preserve ordering of XML elements
-	var json []byte
-	var mv mxj.Map
-
-	mxj.JsonUseNumber = true
-	if input.Ordered {
-		mv, err = mxj.NewMapXmlSeq([]byte(xmldata), true)
-	} else {
-		mv, err = mxj.NewMapXml([]byte(xmldata), true)
-	}
+	mv, err := mxj.NewMapJson([]byte(jsondata))
+	mv.Json(true)
 
 	if err != nil {
 		return false, err
 	}
-	json, err = mv.Json(true)
+
+	var xml []byte
+	if input.Ordered {
+		xml, err = mv.XmlSeq()
+	} else {
+		xml, err = mv.Xml()
+	}
+
 	if err != nil {
 		return false, err
 	}
 
 	output := &Output{}
-	output.ContentAsJson = string(json)
+	output.ContentAsXml = string(xml)
 
-	activityLog.Debug(output.ContentAsJson)
+	activityLog.Debug(output.ContentAsXml)
 
 	err = context.SetOutputObject(output)
 	if err != nil {

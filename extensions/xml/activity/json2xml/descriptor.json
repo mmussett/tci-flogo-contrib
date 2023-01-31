@@ -1,0 +1,27 @@
+{
+  "name": "json2xml",
+  "version": "1.0.4",
+  "author": "Mark Mussett",
+  "type": "flogo:activity",
+  "title": "Json to Xml",
+  "display": {
+    "category": "XML",
+    "visible": true,
+    "smallIcon": "j2x.png",
+    "description": "Convert JSON to XML"
+  },
+  "ref": "github.com/mmussett/tci-flogo-contrib/extensions/xml/activity/json2xml",
+  "inputs": [
+    {
+      "name": "contentAsJson",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "contentAsXml",
+      "type": "string"
+    }
+  ]
+}
