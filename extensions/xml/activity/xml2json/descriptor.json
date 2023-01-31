@@ -1,6 +1,6 @@
 {
   "name": "xml2json",
-  "version": "1.0.4",
+  "version": "1.0.0",
   "author": "Mark Mussett",
   "type": "flogo:activity",
   "title": "Xml to Json",

@@ -1,6 +1,6 @@
 {
   "name": "json2xml",
-  "version": "1.0.4",
+  "version": "1.0.0",
   "author": "Mark Mussett",
   "type": "flogo:activity",
   "title": "Json to Xml",

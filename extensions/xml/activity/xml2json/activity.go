@@ -73,20 +73,25 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 	// Preserve ordering of XML elements
 	var json []byte
 
-	var mv mxj.Map
-
 	if input.Ordered {
-		mv, err = mxj.NewMapXmlSeq([]byte(xmldata), true)
-	} else {
-		mv, err = mxj.NewMapXml([]byte(xmldata), true)
-	}
+		mv, err := mxj.NewMapXmlSeq([]byte(xmldata), true)
+		if err != nil {
+			return false, err
+		}
+		json, err = mv.Json(true)
+		if err != nil {
+			return false, err
+		}
 
-	if err != nil {
-		return false, err
-	}
-	json, err = mv.Json(true)
-	if err != nil {
-		return false, err
+	} else {
+		mv, err := mxj.NewMapXml([]byte(xmldata), true)
+		if err != nil {
+			return false, err
+		}
+		json, err = mv.Json(true)
+		if err != nil {
+			return false, err
+		}
 	}
 
 	output := &Output{}
