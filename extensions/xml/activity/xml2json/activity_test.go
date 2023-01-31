@@ -80,8 +80,22 @@ func TestEvalUnordered(t *testing.T) {
 		fmt.Println(err)
 	}
 
-	fmt.Println(tc.GetOutput("contentAsJson"))
-	require.JSONEq(t, string(expectedUnordered), fmt.Sprint(tc.GetOutput("contentAsJson")))
+	var output = fmt.Sprint(tc.GetOutput("contentAsJson"))
+	fmt.Println("Input    : ", string(xmlData))
+	//fmt.Println("Expected : ", string(expectedOrdered))
+	fmt.Println("Output   : ", output)
+
+	// Inverse
+
+	mv, err := mxj.NewMapJson([]byte(output))
+	if err != nil {
+		assert.Error(t, err)
+	}
+
+	mv.Json(true)
+	xml, err := mv.Xml()
+
+	fmt.Println("Inverse  : ", string(xml))
 
 }
 

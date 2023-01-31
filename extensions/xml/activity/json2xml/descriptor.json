@@ -16,6 +16,11 @@
       "name": "contentAsJson",
       "type": "string",
       "required": true
+    },
+    {
+      "name": "ordered",
+      "type": "boolean",
+      "required": true
     }
   ],
   "outputs": [
