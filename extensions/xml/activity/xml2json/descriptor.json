@@ -5,7 +5,7 @@
   "type": "flogo:activity",
   "title": "Xml to Json",
   "display": {
-    "category": "XML",
+    "category": "Xml2Json",
     "visible": true,
     "smallIcon": "x2j.png",
     "description": "Convert XML to JSON"
