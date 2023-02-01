@@ -7,10 +7,12 @@
 package xml2json
 
 import (
+	"bytes"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
-	"github.com/clbanning/mxj"
+	"github.com/mmussett/mxj"
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
@@ -41,6 +43,22 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 
 func (a *Activity) Metadata() *activity.Metadata {
 	return activityMd
+}
+
+func mapseqToJson(msv mxj.MapSeq, safeEncoding ...bool) ([]byte, error) {
+	var s bool
+	if len(safeEncoding) == 1 {
+		s = safeEncoding[0]
+	}
+
+	b, err := json.Marshal(msv)
+
+	if !s {
+		b = bytes.Replace(b, []byte("\\u003c"), []byte("<"), -1)
+		b = bytes.Replace(b, []byte("\\u003e"), []byte(">"), -1)
+		b = bytes.Replace(b, []byte("\\u0026"), []byte("&"), -1)
+	}
+	return b, err
 }
 
 func (a *Activity) Eval(context activity.Context) (done bool, err error) {
@@ -74,11 +92,13 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 	var json []byte
 
 	if input.Ordered {
-		mv, err := mxj.NewMapXmlSeq([]byte(xmldata), true)
+		msv, err := mxj.NewMapXmlSeq([]byte(xmldata), true)
 		if err != nil {
 			return false, err
 		}
-		json, err = mv.Json(true)
+
+		json, err = mapseqToJson(msv, true)
+
 		if err != nil {
 			return false, err
 		}

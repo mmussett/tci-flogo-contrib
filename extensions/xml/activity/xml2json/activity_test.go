@@ -8,7 +8,7 @@ package xml2json
 
 import (
 	"fmt"
-	"github.com/clbanning/mxj"
+	"github.com/mmussett/mxj"
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/support/test"
 	"github.com/stretchr/testify/assert"
@@ -48,18 +48,6 @@ func TestEvalOrdered(t *testing.T) {
 	fmt.Println("Input    : ", string(xmlData))
 	//fmt.Println("Expected : ", string(expectedOrdered))
 	fmt.Println("Output   : ", output)
-
-	// Inverse
-
-	mv, err := mxj.NewMapJson([]byte(output))
-	if err != nil {
-		assert.Error(t, err)
-	}
-
-	mv.Json(true)
-	xml, err := mv.XmlSeq()
-
-	fmt.Println("Inverse  : ", string(xml))
 
 	//require.JSONEq(t, string(expectedOrdered), fmt.Sprint(tc.GetOutput("contentAsJson")))
 
@@ -117,18 +105,6 @@ func TestEvalUnorderedEncoded(t *testing.T) {
 	//fmt.Println("Expected : ", string(expectedOrdered))
 	fmt.Println("Output   : ", output)
 
-	// Inverse
-
-	mv, err := mxj.NewMapJson([]byte(output))
-	if err != nil {
-		assert.Error(t, err)
-	}
-
-	mv.Json(true)
-	xml, err := mv.Xml()
-
-	fmt.Println("Inverse  : ", string(xml))
-
 }
 
 func TestEvalOrderedEncoded(t *testing.T) {
@@ -150,44 +126,15 @@ func TestEvalOrderedEncoded(t *testing.T) {
 	//fmt.Println("Expected : ", string(expectedOrdered))
 	fmt.Println("Output   : ", output)
 
-	// Inverse
-
-	mv, err := mxj.NewMapJson([]byte(output))
-	if err != nil {
-		assert.Error(t, err)
-	}
-
-	mv.Json(true)
-	xml, err := mv.XmlSeq()
-
-	fmt.Println("Inverse  : ", string(xml))
-
 }
 
-//func TestAnyXML(t *testing.T) {
-//
-//	jsonObj, err := xml2json.XmlToJson(xmlData, true)
-//	if err != nil {
-//		assert.Error(t, err)
-//	}
-//
-//	fmt.Println(string(jsonObj[:len(jsonObj)]))
-//
-//	xmlObj, err := json2xml.JsonToXml(jsonObj)
-//	if err != nil {
-//		assert.Error(t, err)
-//	}
-//
-//	fmt.Println(string(xmlObj[:len(xmlObj)]))
-//
-//}
+func Test(t *testing.T) {
 
-func TestNewMapXmlSeq(t *testing.T) {
+	m, _ := mxj.NewMapXmlSeq(xmlData)
 
-	mv, _ := mxj.NewMapXmlSeq(xmlData)
+	j, _ := m.Json(true)
 
-	json, _ := mv.Json(true)
-
-	fmt.Println(string(json))
-
+	j2, _ := m.Xml()
+	fmt.Println(string(j))
+	fmt.Println(string(j2))
 }
