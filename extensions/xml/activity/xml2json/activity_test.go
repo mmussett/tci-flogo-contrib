@@ -139,6 +139,7 @@ func TestEvalOrderedEncoded(t *testing.T) {
 	tc.SetInput("contentAsXml", encodedXmlData)
 	tc.SetInput("encoded", true)
 	tc.SetInput("ordered", true)
+
 	done, err := act.Eval(tc)
 	if !done {
 		fmt.Println(err)
@@ -157,7 +158,7 @@ func TestEvalOrderedEncoded(t *testing.T) {
 	}
 
 	mv.Json(true)
-	xml, err := mv.Xml()
+	xml, err := mv.XmlSeq()
 
 	fmt.Println("Inverse  : ", string(xml))
 
@@ -180,3 +181,13 @@ func TestEvalOrderedEncoded(t *testing.T) {
 //	fmt.Println(string(xmlObj[:len(xmlObj)]))
 //
 //}
+
+func TestNewMapXmlSeq(t *testing.T) {
+
+	mv, _ := mxj.NewMapXmlSeq(xmlData)
+
+	json, _ := mv.Json(true)
+
+	fmt.Println(string(json))
+
+}
