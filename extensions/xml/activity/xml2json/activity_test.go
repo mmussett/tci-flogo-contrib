@@ -128,13 +128,24 @@ func TestEvalOrderedEncoded(t *testing.T) {
 
 }
 
-func Test(t *testing.T) {
+func TestSequenced(t *testing.T) {
 
-	m, _ := mxj.NewMapXmlSeq(xmlData)
+	ms, _ := mxj.NewMapXmlSeq(xmlData)
+
+	js, _ := ms.Json(true)
+
+	xs, _ := ms.Xml()
+	fmt.Println(string(js))
+	fmt.Println(string(xs))
+}
+
+func TestUnsequenced(t *testing.T) {
+
+	m, _ := mxj.NewMapXml(xmlData)
 
 	j, _ := m.Json(true)
 
-	j2, _ := m.Xml()
+	x, _ := m.Xml()
 	fmt.Println(string(j))
-	fmt.Println(string(j2))
+	fmt.Println(string(x))
 }

@@ -8,7 +8,7 @@ package json2xml
 
 import (
 	"fmt"
-	"github.com/clbanning/mxj"
+	"github.com/mmussett/mxj"
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
@@ -67,13 +67,18 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 
 	var xml []byte
 	if input.Ordered {
-		xml, err = mv.XmlSeq()
+		msv := mxj.MapSeq(mv)
+		xml, err = msv.Xml()
+		if err != nil {
+			return false, err
+		}
+
 	} else {
 		xml, err = mv.Xml()
-	}
+		if err != nil {
+			return false, err
+		}
 
-	if err != nil {
-		return false, err
 	}
 
 	output := &Output{}

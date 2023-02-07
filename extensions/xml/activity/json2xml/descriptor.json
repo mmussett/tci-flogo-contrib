@@ -1,11 +1,11 @@
 {
-  "name": "json2xml",
+  "name": "tibco-xml-json2xml-activity",
   "version": "1.0.0",
   "author": "Mark Mussett",
   "type": "flogo:activity",
   "title": "Json to Xml",
   "display": {
-    "category": "Json2Xml",
+    "category": "xml",
     "visible": true,
     "smallIcon": "j2x.png",
     "description": "Convert JSON to XML"
