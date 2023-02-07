@@ -97,18 +97,18 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 			return false, err
 		}
 
-		json, err = mapseqToJson(msv, true)
+		json, err = mapseqToJson(msv, false)
 
 		if err != nil {
 			return false, err
 		}
 
 	} else {
-		mv, err := mxj.NewMapXml([]byte(xmldata), true)
+		mv, err := mxj.NewMapXml([]byte(xmldata), false)
 		if err != nil {
 			return false, err
 		}
-		json, err = mv.Json(true)
+		json, err = mv.Json(false)
 		if err != nil {
 			return false, err
 		}
