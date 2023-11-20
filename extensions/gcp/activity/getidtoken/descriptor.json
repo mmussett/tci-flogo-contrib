@@ -1,0 +1,42 @@
+{
+    "name": "getidtoken",
+    "version": "1.0.0",
+    "title": "GCP OAuth Get ID Token Activity",
+    "author": "TIBCO Software Inc.",
+    "type": "flogo:activity",
+     
+    "display": {
+       "category": "GCP",
+       "visible": true,
+       "smallIcon": "getidtoken.png",
+       "description": "This activity gets an id token from gcp"
+    },
+ 
+    "ref": "github.com/mmussett/tci-flogo-contrib/extensions/gcp/activity/getidtoken",
+    "inputs": [
+           {
+            "name": "url",
+            "type": "string",
+            "required": true
+           }
+    ],
+  
+    "outputs": [
+           {
+            "name": "accessToken",
+            "type": "string"
+          },
+          {
+            "name": "tokenType",
+            "type": "string"
+          },
+          {
+            "name": "refreshToken",
+            "type": "string"
+          },
+          {
+            "name": "expiry",
+            "type": "string"
+          }
+    ]
+}
