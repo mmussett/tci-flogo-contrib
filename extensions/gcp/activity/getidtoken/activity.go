@@ -14,6 +14,7 @@ import (
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/idtoken"
 	"google.golang.org/api/option"
+	"time"
 )
 
 var activityLog = log.ChildLogger(log.RootLogger(), "gcp-activity-getidtoken")
@@ -57,7 +58,7 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 	output.AccessToken = token.AccessToken
 	output.RefreshToken = token.RefreshToken
 	output.TokenType = token.TokenType
-	output.Expiry = token.Expiry.String()
+	output.Expiry = token.Expiry.Format(time.RFC3339)
 
 	err = context.SetOutputObject(output)
 	if err != nil {
@@ -66,7 +67,7 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 	return true, nil
 }
 
-func getIdTokenFromMetadataServer(url string) (*oauth2.Token, error) {
+func getIdTokenFromMetadataServer(aud string) (*oauth2.Token, error) {
 
 	ctx := context.Background()
 
@@ -78,9 +79,9 @@ func getIdTokenFromMetadataServer(url string) (*oauth2.Token, error) {
 		return nil, fmt.Errorf("failed to generate default credentials: %w", err)
 	}
 
-	ts, err := idtoken.NewTokenSource(ctx, url, option.WithCredentials(credentials))
+	ts, err := idtoken.NewTokenSource(ctx, aud, option.WithCredentials(credentials))
 	if err != nil {
-		activitygLog.Errorf("idtoken.NewTokenSource() function returned error, failed to create NewtokenSource: %w", err)
+		activityLog.Errorf("idtoken.NewTokenSource() function returned error, failed to create NewtokenSource: %w", err)
 		return nil, fmt.Errorf("failed to create NewtokenSource: %w", err)
 	}
 
