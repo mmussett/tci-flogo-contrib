@@ -6,43 +6,36 @@
 package getidtoken
 
 import (
-	"github.com/TIBCOSoftware/flogo-contrib/action/flow/test"
-	"github.com/TIBCOSoftware/flogo-lib/core/activity"
+	"fmt"
+	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/support/test"
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
 	"testing"
 )
 
-var activityMetadata *activity.Metadata
+func TestRegister(t *testing.T) {
 
-func getActivityMetadata() *activity.Metadata {
-	if activityMetadata == nil {
-		jsonMetadataBytes, err := ioutil.ReadFile("activity.json")
-		if err != nil {
-			panic("No Json Metadata found for activity.json path")
-		}
-		activityMetadata = activity.NewMetadata(string(jsonMetadataBytes))
-	}
-	return activityMetadata
-}
+	ref := activity.GetRef(&Activity{})
+	act := activity.Get(ref)
 
-func TestActivityRegistration(t *testing.T) {
-	act := NewActivity(getActivityMetadata())
-	if act == nil {
-		t.Error("Activity Not Registered")
-		t.Fail()
-		return
-	}
+	assert.NotNil(t, act)
 }
 
 func TestEval(t *testing.T) {
-	act := NewActivity(getActivityMetadata())
-	tc := test.NewTestActivityContext(act.Metadata())
-	//setup attrs
-	tc.SetInput("url", "#")
-	_, err := act.Eval(tc)
-	assert.Nil(t, err)
-	accessToken := tc.GetOutput("accessToken")
-	assert.Empty(t, accessToken)
+
+	act := &Activity{}
+
+	tc := test.NewActivityContext(act.Metadata())
+
+	tc.SetInput("url", "http://example.com")
+
+	done, err := act.Eval(tc)
+	if !done {
+		fmt.Println(err)
+	}
+
+	assert.True(t, done)
+	var output = fmt.Sprint(tc.GetOutput("accessToken"))
+	fmt.Println("Output    : ", string(output))
 
 }
