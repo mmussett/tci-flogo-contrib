@@ -19,22 +19,22 @@ import (
 var activityLog = log.ChildLogger(log.RootLogger(), "gcp-activity-getidtoken")
 
 func init() {
-	_ = activity.Register(&GetIdTokenActivity{}, New)
+	_ = activity.Register(&Activity{}, New)
 }
 
 var activityMd = activity.ToMetadata(&Input{}, &Output{})
 
 func New(ctx activity.InitContext) (activity.Activity, error) {
-	return &GetIdTokenActivity{}, nil
+	return &Activity{}, nil
 }
 
-type GetIdTokenActivity struct {
+type Activity struct {
 }
 
-func (a *GetIdTokenActivity) Metadata() *activity.Metadata {
+func (a *Activity) Metadata() *activity.Metadata {
 	return activityMd
 }
-func (a *GetIdTokenActivity) Eval(context activity.Context) (done bool, err error) {
+func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 	activityLog.Info("Executing GetIdToken activity")
 
 	input := &Input{}
@@ -70,18 +70,23 @@ func getIdTokenFromMetadataServer(url string) (*oauth2.Token, error) {
 
 	ctx := context.Background()
 
+	activityLog.Debug("calling google.FindDefaultCredentials() function")
+
 	credentials, err := google.FindDefaultCredentials(ctx)
 	if err != nil {
+		activityLog.Errorf("google.FindDefaultCredentials() function returned error, failed to generate default credentials: %w", err)
 		return nil, fmt.Errorf("failed to generate default credentials: %w", err)
 	}
 
 	ts, err := idtoken.NewTokenSource(ctx, url, option.WithCredentials(credentials))
 	if err != nil {
+		activityLog.Errorf("idtoken.NewTokenSource() function returned error, failed to create NewtokenSource: %w", err)
 		return nil, fmt.Errorf("failed to create NewtokenSource: %w", err)
 	}
 
 	token, err := ts.Token()
 	if err != nil {
+		activityLog.Errorf("ts.Token() function returned error, failed to receive token: %w", err)
 		return nil, fmt.Errorf("failed to receive token: %w", err)
 	}
 
