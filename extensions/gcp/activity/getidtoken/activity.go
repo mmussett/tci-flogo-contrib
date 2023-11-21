@@ -80,7 +80,7 @@ func getIdTokenFromMetadataServer(url string) (*oauth2.Token, error) {
 
 	ts, err := idtoken.NewTokenSource(ctx, url, option.WithCredentials(credentials))
 	if err != nil {
-		activityLog.Errorf("idtoken.NewTokenSource() function returned error, failed to create NewtokenSource: %w", err)
+		activitygLog.Errorf("idtoken.NewTokenSource() function returned error, failed to create NewtokenSource: %w", err)
 		return nil, fmt.Errorf("failed to create NewtokenSource: %w", err)
 	}
 
